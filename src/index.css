@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: #fbf6ea;
+  color: #2b1b14;
+  font-family: "Manrope", sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #ad8a46;
+  color: #fbf6ea;
+}
+
+/* Thin, elegant scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf6ea;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8c295;
+  border-radius: 999px;
+}
+
+.font-telugu-heading {
+  font-family: "Noto Serif Telugu", serif;
+}
+.font-telugu-body,
+.font-telugu-sans {
+  font-family: "Noto Sans Telugu", sans-serif;
+}
+
+/* Letter-spacing breaks Telugu conjunct/matra shaping (e.g. "ఆగస్టు" or
+   "ముహూర్తం" visibly fracture apart). Telugu text should never carry
+   tracking, no matter which utility class gets combined with it elsewhere. */
+.font-telugu-heading,
+.font-telugu-sans,
+.font-telugu-body {
+  letter-spacing: normal !important;
+}
+
+/* Utility: fine gold hairline */
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ad8a46, transparent);
+}
+
+/* Glass nav effect */
+.glass-panel {
+  background: rgba(251, 246, 234, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Accessible visible focus ring, tuned to palette */
+:focus-visible {
+  outline: 2px solid #ad8a46;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Grain overlay helper */
+.bg-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  pointer-events: none;
+}
+
+.section-px {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 640px) {
+  .section-px {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
