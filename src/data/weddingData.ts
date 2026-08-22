@@ -90,6 +90,14 @@ export const config = {
     music: "/audio/3-Sirivennala.mp3",
   },
 
+  receptionVenue: {
+    name_en: "GVR Gardens",
+    name_te: "GVR Gardens",
+    address_en: "Edulla Bayyaram Cross Road",
+    address_te: "Edulla Bayyaram Cross Road",
+    mapUrl: "https://maps.app.goo.gl/JoGZkChDBdX2pMuK7?g_st=aw",
+  },
+
   events: [
     {
       id: "ceremony",
@@ -112,6 +120,18 @@ export const config = {
       date_te: "ఆదివారం, 30 ఆగస్టు 2026",
       desc_en: "At the Convention Hall",
       desc_te: "కన్వెన్షన్ హాల్ నందు",
+    },
+    {
+      id: "reception",
+      title_en: "Reception",
+      title_te: "రిసెప్షన్",
+      time_en: null,
+      time_te: null,
+      date_en: "Monday, 01 September 2026",
+      date_te: "సోమవారం, 01 సెప్టెంబర్ 2026",
+      desc_en: "GVR Gardens, Edulla Bayyaram Cross Road",
+      desc_te: "GVR Gardens, Edulla Bayyaram Cross Road",
+      mapUrl: "https://maps.app.goo.gl/JoGZkChDBdX2pMuK7?g_st=aw",
     },
   ],
 };
@@ -173,6 +193,7 @@ interface CopyShape {
     directions: string;
   };
   lunch: { eyebrow: string; title: string; body: string };
+  reception: { eyebrow: string; title: string; body: string; directions: string };
   family: {
     eyebrow: string;
     title: string;
@@ -291,6 +312,12 @@ export const copy: Record<"en" | "te", CopyShape> = {
       eyebrow: "After The Ceremony",
       title: "Wedding Lunch",
       body: "Please join us for a traditional lunch at the Convention Hall as we celebrate together.",
+    },
+    reception: {
+      eyebrow: "The Celebration",
+      title: "Reception",
+      body: "Please join us for the reception as we celebrate the newlyweds.",
+      directions: "GET DIRECTIONS",
     },
     family: {
       eyebrow: "With Love",
@@ -417,6 +444,12 @@ export const copy: Record<"en" | "te", CopyShape> = {
       eyebrow: "వేడుక అనంతరం",
       title: "విందు",
       body: "కన్వెన్షన్ హాల్ నందు జరుగు సాంప్రదాయ విందుకు దయచేసి విచ్చేయండి.",
+    },
+    reception: {
+      eyebrow: "వేడుక",
+      title: "రిసెప్షన్",
+      body: "నవ వధూవరుల రిసెప్షన్ వేడుకకు దయచేసి విచ్చేయండి.",
+      directions: "దారి చూపండి",
     },
     family: {
       eyebrow: "ప్రేమతో",
