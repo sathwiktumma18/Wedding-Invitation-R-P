@@ -7,7 +7,7 @@ import { CornerMotif, JasmineSprig } from "./OrnamentalMotifs";
 import FloatingPetals from "./FloatingPetals";
 
 export default function TeluguInvitation() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <section className="relative overflow-hidden bg-ivory-deep/60 py-20 sm:py-28">
@@ -78,6 +78,26 @@ export default function TeluguInvitation() {
             <p className="mt-8 text-sm text-maroon/70">మీ ఆగమనాభిలాషులు</p>
             <p className="mt-2 text-xl sm:text-2xl">
               {config.brideFamily.father_te} - {config.brideFamily.mother_te}
+            </p>
+
+            <div className="mx-auto my-8 h-px w-24 bg-gold/40" />
+
+            <p className={`mt-2 text-[15px] italic leading-loose text-maroon/80 ${lang === "te" ? "font-telugu-sans" : "font-body"}`}>
+              {lang === "te"
+                ? "మా చెల్లి పెళ్లికి తప్పక రారండి"
+                : "Maa chelli pelliki thappaka raarandi"}
+            </p>
+            <p className={`mt-1 text-sm text-maroon/70 ${lang === "te" ? "font-telugu-sans" : "font-body"}`}>
+              — {lang === "te" ? "హనుమాన్ సాయి" : "Hanuman Sai"}
+            </p>
+
+            <p className={`mt-6 text-[15px] italic leading-loose text-maroon/80 ${lang === "te" ? "font-telugu-sans" : "font-body"}`}>
+              {lang === "te"
+                ? "మా వదిన పెళ్లికి తప్పకుండా రారండి"
+                : "Maa vadina pelliki thappakunda raarandi"}
+            </p>
+            <p className={`mt-1 text-sm text-maroon/70 ${lang === "te" ? "font-telugu-sans" : "font-body"}`}>
+              — {lang === "te" ? "వధ సాత్విక్" : "Vadha Sathwik"}
             </p>
           </div>
         </motion.div>
