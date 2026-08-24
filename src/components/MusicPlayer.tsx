@@ -3,89 +3,82 @@ import { motion, AnimatePresence } from "framer-motion";
 import { config } from "../data/weddingData";
 import { useLanguage } from "../context/LanguageContext";
 
-const MAX_PLAY_SECONDS = 60; // auto-stop after 1 minute of playback
-
 export default function MusicPlayer() {
   const { t, lang } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [showLabel, setShowLabel] = useState(false);
-  const hasTriedAutoplay = useRef(false);
-  const stopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const playedSecondsRef = useRef(0);
-  const playStartRef = useRef<number | null>(null);
-
-  // Track cumulative playback and stop after MAX_PLAY_SECONDS
-  const startStopTimer = useCallback(() => {
-    if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
-    const remaining = MAX_PLAY_SECONDS - playedSecondsRef.current;
-    if (remaining <= 0) {
-      // Already exceeded — stop immediately
-      audioRef.current?.pause();
-      setPlaying(false);
-      return;
-    }
-    playStartRef.current = Date.now();
-    stopTimerRef.current = setTimeout(() => {
-      audioRef.current?.pause();
-      setPlaying(false);
-      playedSecondsRef.current = MAX_PLAY_SECONDS;
-    }, remaining * 1000);
-  }, []);
-
-  const clearStopTimer = useCallback(() => {
-    if (stopTimerRef.current) {
-      clearTimeout(stopTimerRef.current);
-      stopTimerRef.current = null;
-    }
-    // accumulate elapsed time
-    if (playStartRef.current !== null) {
-      playedSecondsRef.current += (Date.now() - playStartRef.current) / 1000;
-      playStartRef.current = null;
-    }
-  }, []);
+  const hasStartedRef = useRef(false);
 
   const startPlaying = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (playedSecondsRef.current >= MAX_PLAY_SECONDS) return; // already done
+    if (hasStartedRef.current && !audio.paused) return; // already playing
     audio
       .play()
       .then(() => {
         setPlaying(true);
-        startStopTimer();
+        hasStartedRef.current = true;
       })
       .catch(() => {
+        // Autoplay blocked — will retry on user interaction
         setPlaying(false);
       });
-  }, [startStopTimer]);
+  }, []);
 
   // Attempt autoplay immediately on mount
   useEffect(() => {
     startPlaying();
   }, [startPlaying]);
 
-  // Fallback: retry on first user interaction if autoplay was blocked
+  // Fallback: retry on first user interaction if autoplay was blocked (especially mobile)
   useEffect(() => {
-    const tryStartOnFirstInteraction = () => {
-      if (hasTriedAutoplay.current) return;
+    const tryOnInteraction = () => {
       const audio = audioRef.current;
       if (!audio || !audio.paused) return;
-      hasTriedAutoplay.current = true;
       startPlaying();
     };
 
-    const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "scroll"];
-    events.forEach((ev) => window.addEventListener(ev, tryStartOnFirstInteraction, { once: true }));
+    // These events cover mobile and desktop interaction gestures
+    const events: (keyof WindowEventMap)[] = [
+      "pointerdown",
+      "touchstart",
+      "click",
+      "keydown",
+      "scroll",
+    ];
+    events.forEach((ev) =>
+      window.addEventListener(ev, tryOnInteraction, { once: false, passive: true })
+    );
+
+    // Also try when page becomes visible (e.g. user switches back to tab)
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        tryOnInteraction();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
-      events.forEach((ev) => window.removeEventListener(ev, tryStartOnFirstInteraction));
+      events.forEach((ev) => window.removeEventListener(ev, tryOnInteraction));
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [startPlaying]);
 
-  // Cleanup timer on unmount
+  // Clean up listeners once audio is playing
   useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+
     return () => {
-      if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
     };
   }, []);
 
@@ -95,9 +88,7 @@ export default function MusicPlayer() {
     if (playing) {
       audio.pause();
       setPlaying(false);
-      clearStopTimer();
     } else {
-      if (playedSecondsRef.current >= MAX_PLAY_SECONDS) return; // already done
       startPlaying();
     }
     setShowLabel(true);
@@ -106,7 +97,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src={config.assets.music} preload="auto" />
+      <audio ref={audioRef} src={config.assets.music} preload="auto" loop />
       <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2">
         <AnimatePresence>
           {showLabel && (

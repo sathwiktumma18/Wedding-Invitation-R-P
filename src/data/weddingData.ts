@@ -87,7 +87,7 @@ export const config = {
     groomSolo: null as string | null, // e.g. "/assets/images/groom.jpg"
     venuePhoto: "/assets/images/venue.jpg",
     gallery: [] as string[], // additional photos, add paths here later
-    music: "/audio/3-Sirivennala.mp3",
+    music: "/audio/seetha-kalyanam-lyrical-ranarangam-songs-sharwanand-kalyani-priyadarshan_7Zme380k.mp3",
   },
 
   receptionVenue: {
