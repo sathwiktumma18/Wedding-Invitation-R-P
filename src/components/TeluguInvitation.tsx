@@ -97,7 +97,7 @@ export default function TeluguInvitation() {
                 : "Maa vadina pelliki thappakunda raarandi"}
             </p>
             <p className={`mt-1 text-sm text-maroon/70 ${lang === "te" ? "font-telugu-sans" : "font-body"}`}>
-              — {lang === "te" ? "వధ సాత్విక్" : "Vadha Sathwik"}
+              — {lang === "te" ? "వేద సాత్విక్" : "Veda Sathwik"}
             </p>
           </div>
         </motion.div>
